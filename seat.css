@@ -1,0 +1,226 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style-type: none;
+  text-decoration: none;
+  color: rgb(29, 38, 88);
+}
+
+body{
+  background-color: rgb(242, 242, 242);
+  /* background-image: url(../Image/sora2.jpg); */
+  background-position: center;
+  background-size: cover;
+  height: 100%; /* Ensure both html and body take up full viewport height */
+  overflow: hidden; /* This is the key property to disable scrolling */
+  margin: 0; /* Remove default margins */
+  
+}
+
+.context{
+  width: 40%;
+  margin: 0 auto;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 2px 0px 8px 1px rgb(225, 225, 225);
+  height: 100vh;
+  
+}
+
+.logo{
+  width: 100%;
+  height: 15vh;
+  border: 1px solid rgb(234, 234, 234);
+  background-color: rgb(255, 255, 255);
+  display: flex; /* Make the .logo a flex container */
+  justify-content: center; /* Center horizontally along the main axis */
+  align-items: center; /* Center vertically along the cross axis */
+}
+.logo img{
+  width: 26%;
+  object-fit: cover;
+  margin: 0 auto;
+
+}
+.venue {
+  width: 80%;
+  margin: 0 auto;
+  height: 16vh;
+  border-radius: 6px;
+  padding-top: 8px;
+  background-color: white;
+}
+
+.select-venue{
+   text-align: center;
+   margin-top: 30px;
+}
+.select-venue button{
+  width: 32%;
+  height: 6vh;
+  padding: 8px;
+  background-color: transparent;
+  border: 1px solid rgb(207, 207, 207);
+  margin: 4px;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+.select-venue button:hover{
+  background-color: rgb(29, 38, 88);
+  color: rgb(255, 255, 255);
+  border: none;
+}
+
+
+#person-number{
+  border-radius: 6px;
+  width: 12%;
+  height: 8vh;
+  margin-bottom:10px;
+  font-weight: 400;
+}
+
+.select-venue h5{
+  font-size: 17px;
+  font-weight: 400;
+}
+#find-table{
+  width: 60%;
+  background-color: rgb(29, 38, 88);
+  color: rgb(255, 255, 255);
+  font-weight: 500;
+  margin-top: 30px;
+}
+
+#find-table:hover{
+  background-color: rgb(24, 29, 69);
+  color: rgb(228, 228, 228);
+  
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Vertically centers content within the flex container */
+
+  /* --- NEW CSS FOR FIXED FOOTER --- */
+  position: fixed; /* Makes the footer stick to the viewport */
+  bottom: 0;       /* Positions it at the very bottom */
+  left: 0;         /* Ensures it spans from the left edge */
+  padding: 10px 0; /* Add some vertical padding for better spacing */
+  box-sizing: border-box; /* Include padding in the width calculation */
+  z-index: 1000;   /* Ensures the footer stays on top of other content */
+  height: 70px; /* Give it a fixed height. Adjust based on your content.
+                   This height should match the `padding-bottom` on the body. */
+}
+
+#footer {
+  font-size: 12px;
+  font-weight: 400;
+  margin-right: 5px;
+  padding-top: 8px;
+  color: rgb(198, 198, 198);
+}
+
+#img-footer {
+  width: 10%; /* Your existing width */
+  max-width: 110px; /* Optional: Add a max-width to prevent the logo from becoming too large on wide screens */
+  height: auto; /* Ensure aspect ratio is maintained */
+  object-fit: cover; /* Your existing object-fit */
+  filter: brightness(80%); /* Adjust this percentage to get your desired shade of gray */
+}
+
+/* Swipe Animation */
+/* Swipe Left Animation */
+@keyframes swipeLeftSoft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-10%);
+    opacity: 0;
+  }
+}
+
+.swipe-out {
+  animation: swipeLeftSoft 0.2s ease-in-out forwards;
+}
+
+
+/* ✅ Mobile (≤768px): Hide background image and make context full width */
+@media (max-width: 768px) {
+  body {
+    background-image: none;
+    overflow: auto;
+  }
+
+  .context {
+    width: 100%;
+    height: auto;
+  }
+
+  .logo {
+    height: 20vh;
+  }
+
+  .logo img {
+    width: 100%;
+  }
+
+  .select-venue button {
+    width: 30%;
+    height: 42px;
+    font-size: 13px;
+  }
+
+  .select-venue h5 {
+    font-size: 15px;
+  }
+
+  #person-number {
+    width: 16%;
+    height: 45px;
+    font-size: 13px;
+  }
+
+  #find-table {
+    width: 78%;
+    height: 45px;
+  }
+
+  .footer {
+    padding: 10px 0;
+  }
+
+  #footer {
+    padding-top: 4px;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  #img-footer {
+    width: 36%;
+  }
+}
+
+/* ✅ Tablet (769px–1009px): Keep layout but resize background */
+/* ✅ Tablet (769px–1009px): Resize background only, keep context same size */
+@media (min-width: 769px) and (max-width: 1009px) {
+  body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+  }
+
+  .context {
+    width: 40%;   /* Keep same as desktop */
+    height: 100vh; /* Ensure full height like desktop */
+    margin: 0 auto;
+  }
+}
+

@@ -1,0 +1,793 @@
+ *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style-type: none;
+  text-decoration: none;
+  color: rgb(29, 38, 88);
+}
+
+body{
+  background-color: rgb(242, 242, 242);
+  /* background-image: url(../Image/sora2.jpg); */
+  background-position: center;
+  background-size: cover;
+  height: 100%; /* Ensure both html and body take up full viewport height */
+  overflow: hidden; /* This is the key property to disable scrolling */
+  margin: 0; /* Remove default margins */
+  
+}
+
+.context{
+  width: 40%;
+  margin: 0 auto;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 2px 0px 8px 1px rgb(225, 225, 225);
+  height: 100vh;
+  
+}
+
+.logo{
+  width: 100%;
+  height: 15vh;
+  border: 1px solid rgb(234, 234, 234);
+  background-color: rgb(255, 255, 255);
+  display: flex; /* Make the .logo a flex container */
+  justify-content: center; /* Center horizontally along the main axis */
+  align-items: center; /* Center vertically along the cross axis */
+}
+.logo img{
+  width: 26%;
+  object-fit: cover;
+  margin: 0 auto;
+
+}
+
+@keyframes swipeRightSoft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(20%);
+    opacity: 0;
+  }
+}
+
+.swipe-right-out {
+  animation: swipeRightSoft 0.2s ease-in-out forwards;
+}
+.table-wrapper {
+  display: flex;
+  padding-top: 0px;
+ 
+  justify-content: space-between;
+ 
+}
+
+#back-button{
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  color: rgb(123, 123, 123);
+  cursor: pointer;
+  width: fit-content;
+  margin-left: 8px;
+}
+
+#back-button:hover {
+  color: silver;
+}
+/* Time Picker Button Styles (no changes needed here, just for context) */
+.time-picker-section {
+    margin-top: 16px;
+    margin-right: 46px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+#selected-time-button {
+    border-radius: 5px;
+    padding: 17px 20px;
+    font-size: 1.1em;
+    width: 100%;
+    font-weight: 600;
+    color: rgb(29, 38, 88);
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid rgb(216, 216, 216);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    
+}
+
+#selected-time-button:hover {
+    background-color: #ededed;
+    border-color: #cfcfcf;
+}
+
+/* Modal (Popup) Styles - Keep existing, add date input styles */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 100%; 
+    max-width: 500px; 
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    position: relative; 
+    display: flex; 
+    flex-direction: column;
+    gap: 15px; 
+    height: 50vh;
+}
+
+.modal-content h3 {
+    font-size: 17px;
+    text-align: center;
+    color: rgb(29, 38, 88);
+    margin-bottom: 5px; 
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#modal-date-picker {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+    width: 80%; /* Make it full width of its container */
+    max-width: 200px; /* Limit max width for better appearance */
+}
+
+#modal-date-picker:focus {
+    border-color: #1e1e51; /* Match selected color */
+}
+
+
+/* Time Slots Grid Styles - Adjusted max-height for 3 lines */
+#modal-time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+    /* Calculated max-height for ~3 lines of 0.9em (14.4px font) boxes + padding/border/gap */
+    /* (14.4px + 8px*2 + 1px*2) * 3 lines + (10px * 2 gaps) = (14.4 + 16 + 2) * 3 + 20 = 32.4 * 3 + 20 = 97.2 + 20 = 117.2px */
+    max-height: 300px; /* Limit height to approximately 3 lines */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-right: 5px; /* Prevent scrollbar from overlapping content */
+}
+
+/* Styles for individual time slot boxes (reused) */
+.time-slot-box {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 12px 5px;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    user-select: none;
+}
+
+.time-slot-box:hover {
+    background-color: #e0e0e0;
+    border-color: #a0a0a0;
+}
+
+.time-slot-box.selected {
+    background-color: #1e1e51;
+    color: #fff;
+    border-color: #1e1e51;
+}
+
+.time-slot-box.disabled {
+    background-color: #f0f0f0;
+    color: #999;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* #ok-button {
+    background-color: #1e1e51; 
+    color: white;
+    padding: 4px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 400;
+    transition: background-color 0.2s ease;
+    align-self: flex-end; 
+} */
+
+
+.date-scroller-container {
+    border-radius: 6px;
+    height: 8vh;
+    padding: 10px;
+    display: flex;
+    border: 1px solid rgb(207, 207, 208); /* Dark border for contrast */
+    align-items: center; /* Vertically align month label and grid */
+    color: #fff; /* White text for month label */
+    margin-top: 15px; /* Added margin-top to separate it from the button */
+    margin-bottom: 15px; /* Space below the scroller */
+    font-weight: 500;
+    margin-left: auto; /* Center horizontally within .context */
+    margin-right: auto;
+    width: 90%; /* To match modal-content width logic */
+    max-width: 400px; /* To match modal-content max-width logic */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.month-label {
+  writing-mode: vertical-rl;
+    letter-spacing: 2px;
+    font-size: 1em;
+    color: rgb(29, 38, 88); /* Yellowish color for month label */
+    margin-right: 10px; /* Space between month and date grid */
+    text-transform: uppercase;
+    font-weight: 700;
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+.date-scroller-grid {
+    display: flex; /* Make it a flex container for horizontal items */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+    scroll-snap-type: x mandatory; /* Snap to items */
+    gap: 6px; /* Space between date boxes */
+    flex-grow: 1; /* Allow grid to take available space */
+}
+
+/* Hide scrollbar for aesthetic purposes (optional) */
+.date-scroller-grid::-webkit-scrollbar {
+    height: 0;
+}
+
+.date-box {
+    flex-shrink: 0; /* Prevent items from shrinking */
+    width: 44px; /* Fixed width for each date box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent; /* No background by default */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    scroll-snap-align: start; /* Snap to the start of each item */
+    user-select: none; /* Prevent text selection */
+    color: #fff; /* Default text color for dates */
+    border-bottom: 2px solid transparent; /* For selected underline */
+}
+
+.date-box:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Slight hover effect */
+    transform: translateY(-2px);
+}
+
+.date-box .day-of-week {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    color: #aaa; /* Lighter grey for day of week */
+   
+}
+
+.date-box .day-of-month {
+    font-size: 1.1em;
+    color: rgb(29, 38, 88);
+    
+}
+
+.date-box.selected-date {
+    /* Style for selected date */
+    background-color: rgb(29, 38, 88);
+    height: 55px;
+    color: rgb(255, 255, 255);
+    border-bottom-color:rgb(29, 38, 88); /* Yellow underline for selected */
+}
+
+/* Specific styling for "TODAY" */
+.date-box.today .day-of-week {
+    color: #ffffff; /* Yellow for "TODAY" label */
+}
+.date-box.today .day-of-month {
+    color: rgb(255, 255, 255); /* Yellow for "TODAY" number */
+}
+
+
+#ok-button:hover {
+    background-color: #000060;
+}
+
+/* --- Media Queries --- */
+@media (max-width: 768px) {
+    .time-picker-section {
+        margin: 15px;
+        padding: 10px;
+    }
+
+    #selected-time-button {
+        font-size: 1em;
+        padding: 8px 15px;
+        min-width: 120px;
+    }
+
+    .modal-content {
+        width: 95%; 
+        padding: 15px;
+    }
+
+    #modal-time-slots-grid {
+        grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); 
+        gap: 8px;
+        max-height: 100px; /* Adjust for mobile if needed */
+    }
+
+    #ok-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+    
+    #modal-date-picker {
+        max-width: 100%; /* Full width on mobile */
+    }
+}
+
+.date-time{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+.seat-map-container {
+    width: 520px; /* Max width for the container */
+    max-width: 90vw; /* Responsive width */
+    margin: 0 auto;
+    border-radius: 6px;
+    aspect-ratio: 1 / 1; /* Keep it square like the image */
+    background-color: #f9f9f9;
+    border: 1px solid rgb(223, 223, 223);
+    overflow: hidden; /* Crucial for the top semi-circle cut-off */
+    position: relative; /* For absolute positioning of the .seat-map child */
+}
+
+.seat-map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* General Seat Styling */
+.seat {
+    background-color: #eeefef; /* Grey as per image */
+    position: absolute; /* Essential for precise placement */
+    box-sizing: border-box;
+    align-content: center;
+  
+    /* border: 1px solid rgb(213, 213, 213); Include padding and border in the element's total width and height */
+}
+
+.seat span{
+  color: rgb(29, 38, 88);
+  text-align: center;
+  font-size: 20px;
+}
+
+.seat:hover{
+  background-color: rgb(232, 232, 232);
+  border: 1px solid rgb(230, 230, 230); /* Include padding and border in the element's total width and height */
+  cursor: pointer;
+  color: white;
+}
+
+/* Specific Seat Styles */
+.normal-seat {
+    width: 40px; /* Example size */
+    height: 40px; /* Needs to be equal to width for a perfect circle */
+    border-radius: 50%;
+    align-content: center;
+    text-align: center;   
+}
+
+.sofa-seat {
+    width: 80px; /* Example width */
+    height: 60px; /* Example height */
+    border-radius: 10px; /* Rounded corners for sofas */
+    align-content: center;
+    text-align: center;
+}
+
+.counter {
+    background-color: #e8e8e8; /* Grey as per image */
+    position: absolute;
+    width: 200px; /* Example width for the oval */
+    height: 100px; /* Example height for the oval */
+    border-radius: 50%; /* Makes it an oval if width != height */
+}
+
+#cocktail-counter {
+    top: 35%; /* Adjust as needed */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centering trick */
+    width: 30%; /* Percentage based on parent width */
+    height: 15%; /* Percentage based on parent height */
+}
+
+/* Top Row Seats (Estimates) */
+#Seat-1 { top: 20%; left: 20%; }
+#Seat-2 { top: 15%; left: 30%; }
+#Seat-3 { top: 10%; left: 39%;  }
+#Seat-4 { top: 8%; left: 50%;  }
+#Seat-5 { top: 10%; left: 60%; }
+#seat-top-middle-1 { top: 6%; left: 48%; width: 250px; height: 15px; border-radius: 7px;} /* This looks like a rectangular bar */
+#Seat-6 { top: 15%; left: 69%;}
+#Seat-7 { top: 20%; left: 78%; }
+
+/* Seats around the Counter (Estimates) */
+#Seat-C1 { top: 23%; left: 40%; }
+#Seat-C2 { top: 23%; left: 60%; }
+#Seat-C3 { top: 29%; left: 30%; }
+#Seat-C4 { top: 29%; left: 70%; }
+#Seat-C5 { top: 39%; left: 28%; }
+#Seat-C6 { top: 39%; left: 72%; }
+#Seat-C7 { top: 48%; left: 40%; }
+#Seat-C8 { top: 48%; left: 60%; }
+
+/* Bottom Left Seats (Estimates) */
+#Seat-D1 { top: 65%; left: 40%; }
+#Seat-D2 { top: 75%; left: 40%; }
+#Seat-D3 { top: 85%; left: 40%; }
+
+/* Bottom Right Seats (Estimates) */
+#Seat-D4 { top: 65%; left: 60%; }
+#Seat-D5 { top: 75%; left: 60%; }
+#Seat-D6 { top: 85%; left: 60%; }
+
+/* Sofa Seats (Estimates) */
+#Sofa-1 { top: 60%; left: 23%; width: 10%; height: 10%; }
+#Sofa-2 { top: 73%; left: 23%; width: 10%; height: 10%; }
+#Sofa-3 { top: 86%; left: 23%; width: 10%; height: 10%; }
+
+#Sofa-4 { top: 60%; left: 78%; width: 10%; height: 10%; }
+#Sofa-5 { top: 73%; left: 78%; width: 10%; height: 10%; }
+#Sofa-6 { top: 86%; left: 78%; width: 10%; height: 10%; }
+
+/* Centering normal and sofa seats after positioning */
+/* For these seats, the `top` and `left` define the top-left corner.
+   If you want them centered on the `top`/`left` coordinates, add: */
+.normal-seat, .sofa-seat {
+    transform: translate(-50%, -50%); /* Centers the element on its top/left point */
+}
+
+
+/* Add this to your table.css */
+.modal-booking {
+    background-color: #fefefe;
+    margin: auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 100%; 
+    max-width: 500px; 
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    position: relative; 
+    display: flex; 
+    flex-direction: column;
+    gap: 15px;
+}
+.user-input-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.user-input-modal .modal-booking {
+    background-color: #fefefe;
+    margin: auto; /* Centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 100%; /* Could be adjusted */
+    max-width: 500px; /* Max width for larger screens */
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+  
+}
+
+/* Add an animation for the modal */
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+.user-input-modal .close-btn {
+    color: #d0d0d0;
+    font-size: 28px;
+    font-weight: bold; 
+}
+
+.user-input-modal .close-btn:hover,
+.user-input-modal .close-btn:focus {
+    color: rgb(107, 107, 107);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.user-input-modal form {
+    display: flex;
+    flex-direction: column;
+  
+}
+
+.user-input-modal label {
+    color: #5d5d5d;
+}
+
+.field{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  
+  width: 100%;
+
+}
+
+.field .field-detail{
+  width: 100%;
+  padding:6px;
+}
+
+
+.user-input-modal input[type="text"],
+.user-input-modal input[type="tel"],
+.user-input-modal input[type="email"],
+.user-input-modal input[type="datetime-local"] {
+    padding: 6px;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid #e7e7e7;
+    border-radius: 4px;
+    color: rgb(82, 82, 82);
+}
+
+.user-input-modal button[type="submit"] {
+    background-color: #242E52; /* A dark blue/grey from your provided image */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.user-input-modal button[type="submit"]:hover {
+    background-color: #3A476F; /* Slightly lighter on hover */
+}
+
+/* Optional: Add some styling for the selected seat ID display in the modal title */
+.modal-booking h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2a3869; /* Dark blue/grey */
+}
+
+#selectedSeatIdDisplay {
+    font-size: 20px;
+    font-weight: normal;
+    color: #8e8e8e;
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+.view-text {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Top Left */
+#view-text-top-left {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: rgb(213, 213, 213);
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+
+/* Top Right */
+#view-text-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 5px;
+  color:  rgb(213, 213, 213);
+  padding: 2px 6px;
+}
+
+/* Bottom Left - Vertical Text */
+#view-text-bottom-left {
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg); /* Optional if you want the text to go bottom-up */
+  padding: 4px 2px;
+  border-radius: 4px;
+  color:  rgb(213, 213, 213);
+}
+
+/* Bottom Right - Vertical Text */
+#view-text-bottom-right {
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg); /* Optional */
+  padding: 4px 2px;
+  color:  rgb(213, 213, 213);
+  border-radius: 4px;
+}
+
+
+
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Vertically centers content within the flex container */
+
+  /* --- NEW CSS FOR FIXED FOOTER --- */
+  position: fixed; /* Makes the footer stick to the viewport */
+  bottom: 0;       /* Positions it at the very bottom */
+  left: 0;         /* Ensures it spans from the left edge */
+  padding: 0px 0; /* Add some vertical padding for better spacing */
+  box-sizing: border-box; /* Include padding in the width calculation */
+  z-index: 1000;   /* Ensures the footer stays on top of other content */
+  height: 70px; /* Give it a fixed height. Adjust based on your content.
+                   This height should match the `padding-bottom` on the body. */
+}
+
+#footer {
+  font-size: 12px;
+  font-weight: 400;
+  margin-right: 5px;
+  padding-top: 8px;
+  color: rgb(198, 198, 198);
+}
+
+#img-footer {
+  width: 10%; /* Your existing width */
+  max-width: 110px; /* Optional: Add a max-width to prevent the logo from becoming too large on wide screens */
+  height: auto; /* Ensure aspect ratio is maintained */
+  object-fit: cover; /* Your existing object-fit */
+  filter: brightness(80%); /* Adjust this percentage to get your desired shade of gray */
+}
+
+/* ✅ Mobile (≤768px): Hide background image and make context full width */
+@media (max-width: 768px) {
+  body {
+    background-image: none;
+    overflow: auto;
+  }
+
+  .context {
+    width: 100%;
+    height: auto;
+  }
+
+  .logo {
+    height: 20vh;
+  }
+
+  .logo img {
+    width: 100%;
+  }
+
+  .select-venue button {
+    width: 30%;
+    height: 42px;
+    font-size: 13px;
+  }
+
+  .select-venue h5 {
+    font-size: 15px;
+  }
+
+  #person-number {
+    width: 16%;
+    height: 45px;
+    font-size: 13px;
+  }
+
+  #find-table {
+    width: 78%;
+    height: 45px;
+  }
+
+  .footer {
+    padding: 10px 0;
+  }
+
+  #footer {
+    padding-top: 4px;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  #img-footer {
+    width: 36%;
+  }
+}
+
+/* ✅ Tablet (769px–1009px): Keep layout but resize background */
+/* ✅ Tablet (769px–1009px): Resize background only, keep context same size */
+@media (min-width: 769px) and (max-width: 1009px) {
+  body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+  }
+
+  .context {
+    width: 40%;   /* Keep same as desktop */
+    height: 100vh; /* Ensure full height like desktop */
+    margin: 0 auto;
+  }
+}
+
