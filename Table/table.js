@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Set month label dynamically
+    const monthLabel = document.querySelector(".month-label");
+    if (monthLabel) {
+        const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        const currentMonth = new Date().getMonth(); // 0 = January, 11 = December
+        monthLabel.textContent = monthNames[currentMonth];
+    }
+
     const backButton = document.getElementById('back-button');
     const wrapper = document.querySelector('.table-wrapper');
 
@@ -9,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 400);
     });
 
-    const timePickerModal = document.getElementById('time-picker-modal');
+  const timePickerModal = document.getElementById('time-picker-modal');
   const selectedTimeButton = document.getElementById('selected-time-button');
   const timePickerCloseButton = timePickerModal ? timePickerModal.querySelector('.close-button') : null;
   const okButton = document.getElementById('ok-button');
